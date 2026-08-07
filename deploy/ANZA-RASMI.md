@@ -40,12 +40,14 @@ php scripts/check-new-activity.php
 
 ## Seva iwe live bila PC
 
-Ukikosa pesa ya mini PC, tumia **Oracle Cloud Always Free** + OpenVPN:
+Ukikosa pesa ya mini PC, tumia **AWS Free Tier** + OpenVPN:
 
-1. `php scripts/prepare-oracle-migration.php` (kwenye PC hii)
-2. Fuata hatua zote: [ORACLE.md](ORACLE.md)
-3. `sudo bash deploy/verify-oracle.sh` kwenye VM
+1. `php scripts/prepare-aws-migration.php` (kwenye PC hii)
+2. Fuata hatua zote: [AWS.md](AWS.md)
+3. `sudo bash deploy/verify-oracle.sh` kwenye EC2
 4. Zima `php artisan serve` kwenye laptop
+
+(Oracle: [ORACLE.md](ORACLE.md) — ikiwa signup itafanikiwa baadaye.)
 
 ## Kabla ya kuanza kuuza
 

@@ -108,7 +108,8 @@ fi
 
 step "Kuandaa .env"
 ENV_TEMPLATE="$APP_DIR/deploy/env.production.example"
-if [[ "${DEPLOY_TARGET:-local}" == "oracle" ]]; then
+# Cloud VPS (Oracle / AWS): hakuna IP ya LAN — tumia template ya umma.
+if [[ "${DEPLOY_TARGET:-local}" == "oracle" || "${DEPLOY_TARGET:-local}" == "aws" ]]; then
     ENV_TEMPLATE="$APP_DIR/deploy/env.oracle.example"
 fi
 
@@ -193,7 +194,7 @@ if command -v ufw >/dev/null 2>&1; then
     ufw allow 80/tcp || true
     ufw allow 443/tcp || true
     ufw allow 8000/tcp || true
-    if [[ "${DEPLOY_TARGET:-local}" == "oracle" ]]; then
+    if [[ "${DEPLOY_TARGET:-local}" == "oracle" || "${DEPLOY_TARGET:-local}" == "aws" ]]; then
         ufw allow 1194/udp || true
         ufw allow 1194/tcp || true
     fi
@@ -220,15 +221,18 @@ cat <<INFO
 
 INFO
 
-if [[ "${DEPLOY_TARGET:-local}" == "oracle" ]]; then
-    cat <<ORACLE
+if [[ "${DEPLOY_TARGET:-local}" == "oracle" || "${DEPLOY_TARGET:-local}" == "aws" ]]; then
+    DOC="deploy/ORACLE.md"
+    [[ "${DEPLOY_TARGET}" == "aws" ]] && DOC="deploy/AWS.md"
+    cat <<CLOUD
 
-  Hatua za Oracle zilizobaki:
+  Hatua za cloud zilizobaki (${DEPLOY_TARGET}):
     1. sudo bash deploy/openvpn/setup-server.sh
     2. Pakia certs kwenye MikroTik + import oracle-openvpn-client.rsc
     3. php scripts/apply-oracle-router-ip.php
     4. php scripts/configure-oracle-portal.php <PUBLIC_IP>
-    5. Soma deploy/ORACLE.md sehemu ya ukaguzi
+    5. sudo bash deploy/verify-oracle.sh
+    6. Soma ${DOC}
 
-ORACLE
+CLOUD
 fi

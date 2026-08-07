@@ -21,6 +21,7 @@ yarn-error.log
 /deploy/app-key.txt
 /deploy/cloudflare-token.txt
 /deploy/ORACLE-MIGRATION.txt
+/deploy/AWS-MIGRATION.txt
 /deploy/openvpn/client-files/
 /deploy/openvpn/generated/
 /storage/backups

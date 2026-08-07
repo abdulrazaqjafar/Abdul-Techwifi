@@ -4,11 +4,12 @@ Kuna njia **mbili**:
 
 | Njia | Gharama | Mwongozo |
 |---|---|---|
-| **Oracle Cloud Always Free** (bila kununua kifaa) | Bure (Always Free) | **[ORACLE.md](ORACLE.md)** ← anza hapa ukiwa huna mini PC |
+| **AWS Free Tier** (bila kununua kifaa) | Bure miezi 12 | **[AWS.md](AWS.md)** ← anza hapa |
+| Oracle Cloud Always Free | Bure (milele, ikiwa signup inafanikiwa) | [ORACLE.md](ORACLE.md) |
 | Mini PC ofisini (IP `192.168.20.253`) | ~TSh 250k–500k | Sehemu zilizo chini |
 
-Mwongozo huu (chini) ni wa **mini PC**. Kwa Oracle, MikroTik inaunganisha
-kwenda cloud kwa OpenVPN — soma [ORACLE.md](ORACLE.md).
+Mwongozo huu (chini) ni wa **mini PC**. Kwa AWS/Oracle, MikroTik inaunganisha
+kwenda cloud kwa OpenVPN — soma [AWS.md](AWS.md).
 
 Kwa matumizi ya domain `tech-spherewifi.xyz` (HTTPS na ufikiaji wa mbali),
 soma [DOMAIN.md](DOMAIN.md) baada ya kumaliza mwongozo huu.
