@@ -13,7 +13,8 @@ APP_DIR="/var/www/techsphere"
 APP_USER="www-data"
 DB_NAME="techsphere_wifi"
 DB_USER="techsphere"
-PHP_VERSION="8.3"
+# Imewekwa baada ya apt update — Ubuntu mpya inaweza kuwa na 8.4/8.5 badala ya 8.3.
+PHP_VERSION="${PHP_VERSION:-}"
 SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 if [[ $EUID -ne 0 ]]; then
@@ -23,8 +24,36 @@ fi
 
 step() { echo -e "\n\033[1;36m==> $1\033[0m"; }
 
+detect_php_version() {
+    local candidate
+    for candidate in 8.4 8.3 8.5 8.2 8.1; do
+        if apt-cache show "php${candidate}-fpm" >/dev/null 2>&1; then
+            echo "$candidate"
+            return 0
+        fi
+    done
+    return 1
+}
+
 step "Kupakua orodha ya packages"
 apt-get update -y
+
+if [[ -z "$PHP_VERSION" ]]; then
+    if ! PHP_VERSION="$(detect_php_version)"; then
+        step "PHP haipatikani kwenye repo — inaongezwa ondrej/php"
+        apt-get install -y software-properties-common
+        add-apt-repository -y ppa:ondrej/php
+        apt-get update -y
+        PHP_VERSION="$(detect_php_version || true)"
+    fi
+fi
+
+if [[ -z "${PHP_VERSION:-}" ]]; then
+    echo "Imeshindwa kupata package ya PHP-FPM. Angalia: apt-cache search php-fpm" >&2
+    exit 1
+fi
+
+echo "PHP itatumika: ${PHP_VERSION}"
 
 step "Kusakinisha Nginx, MariaDB, PHP $PHP_VERSION na zana nyingine"
 apt-get install -y \

@@ -72,7 +72,7 @@ international payments, au chat ya AWS Support.
 | Sehemu | Thamani |
 |---|---|
 | Name | `techsphere` |
-| AMI | **Ubuntu Server 24.04 LTS** (Free tier eligible) |
+| AMI | **Ubuntu Server 24.04 LTS** (Free tier eligible) — epuka “25.04/26.04/resolute” ikiwa unaona; installer sasa inachagua PHP yenyewe |
 | Instance type | **t2.micro** au **t3.micro** (Free tier eligible) |
 | Key pair | Create new → jina `techsphere` → `.pem` → **pakua na hifadhi** |
 | Network | Allow SSH from your IP (au Anywhere 0.0.0.0/0 ukiwa unajaribu) |
