@@ -113,3 +113,5 @@ file_put_contents($keyFile, (string) config('app.key'));
 
 echo PHP_EOL.'APP_KEY imehifadhiwa: deploy/app-key.txt'.PHP_EOL;
 echo 'Usiifute — bila yake seva mpya haitaweza kusoma password ya router.'.PHP_EOL;
+echo PHP_EOL.'Kwa Oracle Cloud: php scripts/prepare-oracle-migration.php'.PHP_EOL;
+echo 'Usipush database-dump.sql wala app-key.txt kwenye GitHub.'.PHP_EOL;

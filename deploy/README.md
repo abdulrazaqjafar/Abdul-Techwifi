@@ -1,11 +1,14 @@
 # Kuweka mfumo utumike muda wote (bila kuacha PC imewaka)
 
-Mwongozo huu unahamisha Tech-Sphere Wi-Fi Billing kutoka PC yako kwenda kifaa
-kidogo kinachobaki kimewaka muda wote, kikichukua IP ileile `192.168.20.253`.
+Kuna njia **mbili**:
 
-Kwa sababu IP haibadiliki, **hakuna kitu chochote kwenye MikroTik
-kinachohitaji kubadilishwa** — walled garden, ip-binding, na `login.html`
-zote zinaendelea kufanya kazi kama zilivyo.
+| Njia | Gharama | Mwongozo |
+|---|---|---|
+| **Oracle Cloud Always Free** (bila kununua kifaa) | Bure (Always Free) | **[ORACLE.md](ORACLE.md)** ← anza hapa ukiwa huna mini PC |
+| Mini PC ofisini (IP `192.168.20.253`) | ~TSh 250k–500k | Sehemu zilizo chini |
+
+Mwongozo huu (chini) ni wa **mini PC**. Kwa Oracle, MikroTik inaunganisha
+kwenda cloud kwa OpenVPN — soma [ORACLE.md](ORACLE.md).
 
 Kwa matumizi ya domain `tech-spherewifi.xyz` (HTTPS na ufikiaji wa mbali),
 soma [DOMAIN.md](DOMAIN.md) baada ya kumaliza mwongozo huu.

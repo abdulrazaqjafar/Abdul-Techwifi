@@ -20,6 +20,9 @@ yarn-error.log
 /deploy/database-dump.sql
 /deploy/app-key.txt
 /deploy/cloudflare-token.txt
+/deploy/ORACLE-MIGRATION.txt
+/deploy/openvpn/client-files/
+/deploy/openvpn/generated/
 /storage/backups
 /.fleet
 /.idea

@@ -38,6 +38,15 @@ Angalia mipangilio hii wakati wowote:
 php scripts/check-new-activity.php
 ```
 
+## Seva iwe live bila PC
+
+Ukikosa pesa ya mini PC, tumia **Oracle Cloud Always Free** + OpenVPN:
+
+1. `php scripts/prepare-oracle-migration.php` (kwenye PC hii)
+2. Fuata hatua zote: [ORACLE.md](ORACLE.md)
+3. `sudo bash deploy/verify-oracle.sh` kwenye VM
+4. Zima `php artisan serve` kwenye laptop
+
 ## Kabla ya kuanza kuuza
 
 ### 1. Hakikisha hakuna intaneti ya bure

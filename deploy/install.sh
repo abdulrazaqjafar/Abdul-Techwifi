@@ -107,14 +107,25 @@ if [[ -f "$DUMP_FILE" ]]; then
 fi
 
 step "Kuandaa .env"
+ENV_TEMPLATE="$APP_DIR/deploy/env.production.example"
+if [[ "${DEPLOY_TARGET:-local}" == "oracle" ]]; then
+    ENV_TEMPLATE="$APP_DIR/deploy/env.oracle.example"
+fi
+
 if [[ ! -f "$APP_DIR/.env" ]]; then
-    cp "$APP_DIR/deploy/env.production.example" "$APP_DIR/.env"
+    cp "$ENV_TEMPLATE" "$APP_DIR/.env"
     echo "ONYO: .env mpya imetengenezwa. Weka credentials za ClickPesa ndani yake."
 fi
 
 sed -i "s|^DB_DATABASE=.*|DB_DATABASE=${DB_NAME}|" "$APP_DIR/.env"
 sed -i "s|^DB_USERNAME=.*|DB_USERNAME=${DB_USER}|" "$APP_DIR/.env"
 sed -i "s|^DB_PASSWORD=.*|DB_PASSWORD=${DB_PASSWORD}|" "$APP_DIR/.env"
+
+# Oracle / cloud: APP_URL inawekwa kutoka APP_PUBLIC_URL (IP ya umma).
+if [[ -n "${APP_PUBLIC_URL:-}" ]]; then
+    sed -i "s|^APP_URL=.*|APP_URL=${APP_PUBLIC_URL}|" "$APP_DIR/.env"
+    echo "APP_URL imewekwa: ${APP_PUBLIC_URL}"
+fi
 
 step "Kusakinisha dependencies za PHP"
 COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --no-interaction
@@ -180,18 +191,24 @@ step "Kufungua firewall"
 if command -v ufw >/dev/null 2>&1; then
     ufw allow 22/tcp || true
     ufw allow 80/tcp || true
+    ufw allow 443/tcp || true
     ufw allow 8000/tcp || true
+    if [[ "${DEPLOY_TARGET:-local}" == "oracle" ]]; then
+        ufw allow 1194/udp || true
+        ufw allow 1194/tcp || true
+    fi
 fi
 
 systemctl enable --now php${PHP_VERSION}-fpm nginx
 
 step "Imekamilika"
 IP_ADDRESS="$(hostname -I | awk '{print $1}')"
+PUBLIC_HINT="${APP_PUBLIC_URL:-http://${IP_ADDRESS}}"
 cat <<INFO
 
   Mfumo unapatikana hapa:
-    http://${IP_ADDRESS}
-    http://${IP_ADDRESS}:8000   (anwani ya zamani, bado inafanya kazi)
+    ${PUBLIC_HINT}
+    http://${IP_ADDRESS}:8000
 
   Database:
     jina=${DB_NAME}  mtumiaji=${DB_USER}
@@ -202,3 +219,16 @@ cat <<INFO
     tail -f ${APP_DIR}/storage/logs/laravel.log
 
 INFO
+
+if [[ "${DEPLOY_TARGET:-local}" == "oracle" ]]; then
+    cat <<ORACLE
+
+  Hatua za Oracle zilizobaki:
+    1. sudo bash deploy/openvpn/setup-server.sh
+    2. Pakia certs kwenye MikroTik + import oracle-openvpn-client.rsc
+    3. php scripts/apply-oracle-router-ip.php
+    4. php scripts/configure-oracle-portal.php <PUBLIC_IP>
+    5. Soma deploy/ORACLE.md sehemu ya ukaguzi
+
+ORACLE
+fi

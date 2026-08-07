@@ -83,10 +83,12 @@
         var params = 'view=packages&mac=$(mac)&ip=$(ip)&link-login=$(link-login)&link-orig=$(link-orig)';
         var status = document.getElementById('status');
 
-        // The name is preferred, but some phones resolve DNS over HTTPS and
-        // never see the router's answer for it. The plain address always works,
-        // so it stays as a fallback rather than leaving such a phone stranded.
+        // Domain first (MikroTik static DNS). After Oracle cutover the domain
+        // and public IP point at the cloud VM; the LAN address stays as a
+        // last-resort fallback while the old PC is still serving.
+        // configure-oracle-portal.php rewrites this list with the real PUBLIC_IP.
         var hosts = [
+            'http://tech-spherewifi.xyz',
             'http://tech-spherewifi.xyz:8000',
             'http://192.168.20.253:8000'
         ];

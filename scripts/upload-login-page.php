@@ -44,7 +44,8 @@ $setFtp = function (string $disabled) use ($client): void {
         (new RouterOS\Query('/ip/service/set'))
             ->equal('.id', $id)
             ->equal('disabled', $disabled)
-            ->equal('address', '192.168.20.0/24')
+            // LAN ya ofisi + subnet ya OpenVPN (Oracle)
+            ->equal('address', '192.168.20.0/24,10.8.0.0/24')
     )->read();
 };
 
