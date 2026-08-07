@@ -24,10 +24,12 @@ fi
 
 step() { echo -e "\n\033[1;36m==> $1\033[0m"; }
 
-# phpoffice/phpspreadsheet 1.30.x haitaki PHP 8.5+, kwa hiyo 8.4/8.3 kwanza.
+COMPOSER_IGNORE_PLATFORM_REQS=0
+
+# Prefer 8.4/8.3; fall back to 8.5 with Composer platform ignore (Excel lockfile).
 detect_php_version() {
     local candidate
-    for candidate in 8.4 8.3 8.2; do
+    for candidate in 8.4 8.3 8.2 8.5; do
         if apt-cache show "php${candidate}-fpm" >/dev/null 2>&1; then
             echo "$candidate"
             return 0
@@ -36,32 +38,34 @@ detect_php_version() {
     return 1
 }
 
-ensure_compatible_php() {
+remove_broken_ondrej_ppa() {
+    rm -f /etc/apt/sources.list.d/ondrej-ubuntu-php-*.list \
+          /etc/apt/sources.list.d/ondrej-ubuntu-php-*.sources \
+          /etc/apt/sources.list.d/*ondrej*php* 2>/dev/null || true
+}
+
+ensure_php() {
     if PHP_VERSION="$(detect_php_version)"; then
         return 0
     fi
-
-    step "PHP 8.4/8.3 haipatikani (8.5 haitoshi kwa Excel) — inaongezwa ondrej/php"
-    apt-get install -y software-properties-common
-    add-apt-repository -y ppa:ondrej/php
-    apt-get update -y
-
-    if PHP_VERSION="$(detect_php_version)"; then
-        return 0
-    fi
-
     return 1
 }
 
 step "Kupakua orodha ya packages"
+remove_broken_ondrej_ppa
 apt-get update -y
 
 if [[ -z "$PHP_VERSION" ]]; then
-    if ! ensure_compatible_php; then
-        echo "Imeshindwa kupata PHP 8.4 au 8.3. Usitumie PHP 8.5 kwa sasa." >&2
-        echo "Angalia: apt-cache search php8.4-fpm" >&2
+    if ! ensure_php; then
+        echo "Imeshindwa kupata package ya PHP-FPM." >&2
         exit 1
     fi
+fi
+
+# PhpSpreadsheet 1.30.x inasema <8.5; kwenye Ubuntu resolute kuna 8.5 pekee.
+if [[ "$PHP_VERSION" == "8.5" ]]; then
+    COMPOSER_IGNORE_PLATFORM_REQS=1
+    echo "ONYO: PHP 8.5 — Composer itapuuza ukaguzi wa toleo (Excel packages)."
 fi
 
 echo "PHP itatumika: ${PHP_VERSION}"
@@ -169,7 +173,11 @@ if [[ -n "${APP_PUBLIC_URL:-}" ]]; then
 fi
 
 step "Kusakinisha dependencies za PHP"
-COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --no-interaction
+COMPOSER_FLAGS=(--no-dev --optimize-autoloader --no-interaction)
+if [[ "${COMPOSER_IGNORE_PLATFORM_REQS}" == "1" ]]; then
+    COMPOSER_FLAGS+=(--ignore-platform-reqs)
+fi
+COMPOSER_ALLOW_SUPERUSER=1 composer install "${COMPOSER_FLAGS[@]}"
 
 # APP_KEY lazima iwe ileile ya PC ya zamani. router_settings.router_password
 # imehifadhiwa kwa encryption inayoitegemea; key mpya ingeifanya isisomeke na
