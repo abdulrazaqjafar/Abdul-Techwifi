@@ -1,0 +1,21 @@
+[Unit]
+Description=Tech-Sphere Wi-Fi Billing queue worker
+After=network.target mariadb.service
+Requires=mariadb.service
+
+[Service]
+User=www-data
+Group=www-data
+Restart=always
+RestartSec=5
+WorkingDirectory=/var/www/techsphere
+
+# --max-time inaifanya process ijifunge kila saa ili kumbukumbu isijae.
+# systemd itaianzisha upya mara moja.
+ExecStart=/usr/bin/php /var/www/techsphere/artisan queue:work --sleep=3 --tries=3 --max-time=3600
+
+StandardOutput=append:/var/log/techsphere-queue.log
+StandardError=append:/var/log/techsphere-queue.log
+
+[Install]
+WantedBy=multi-user.target

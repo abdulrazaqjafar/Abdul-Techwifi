@@ -1,0 +1,594 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source "../**/*.blade.php";
+@source "../**/*.js";
+@source "../**/*.vue";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-primary-50: #f0fdf4;
+    --color-primary-100: #dcfce7;
+    --color-primary-200: #bbf7d0;
+    --color-primary-300: #86efac;
+    --color-primary-400: #4ade80;
+    --color-primary-500: #22c55e;
+    --color-primary-600: #16a34a;
+    --color-primary-700: #15803d;
+    --color-primary-800: #166534;
+    --color-primary-900: #14532d;
+
+    --color-secondary-50: #f0f4f8;
+    --color-secondary-100: #d9e2ec;
+    --color-secondary-200: #bcccdc;
+    --color-secondary-300: #9fb3c8;
+    --color-secondary-400: #829ab1;
+    --color-secondary-500: #627d98;
+    --color-secondary-600: #486581;
+    --color-secondary-700: #334e68;
+    --color-secondary-800: #1e3a5f;
+    --color-secondary-900: #102a43;
+
+    --color-surface: #ffffff;
+    --color-surface-muted: #f8fafc;
+    --color-border: #e2e8f0;
+    --color-text: #0f172a;
+    --color-text-muted: #64748b;
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    html.dark {
+        color-scheme: dark;
+    }
+
+    body {
+        @apply bg-surface-muted text-text antialiased transition-colors duration-200;
+    }
+
+    html.dark body {
+        @apply bg-slate-950 text-slate-100;
+    }
+
+    ::selection {
+        @apply bg-primary-600/20 text-primary-900;
+    }
+
+    html.dark ::selection {
+        @apply bg-primary-500/30 text-primary-100;
+    }
+}
+
+@layer components {
+    .card {
+        @apply rounded-2xl border border-border bg-surface shadow-sm transition-all duration-200;
+    }
+
+    html.dark .card {
+        @apply border-slate-800 bg-slate-900;
+    }
+
+    .card-hover {
+        @apply hover:-translate-y-0.5 hover:shadow-md;
+    }
+
+    .input-field {
+        @apply w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm text-text shadow-sm transition focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20;
+    }
+
+    html.dark .input-field {
+        @apply border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-400;
+    }
+
+    .label {
+        @apply mb-1.5 block text-sm font-medium text-text;
+    }
+
+    html.dark .label {
+        @apply text-slate-200;
+    }
+
+    .badge {
+        @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold;
+    }
+
+    .badge-success {
+        @apply bg-primary-100 text-primary-800;
+    }
+
+    html.dark .badge-success {
+        @apply bg-primary-900/40 text-primary-300;
+    }
+
+    .badge-warning {
+        @apply bg-amber-100 text-amber-800;
+    }
+
+    html.dark .badge-warning {
+        @apply bg-amber-900/40 text-amber-300;
+    }
+
+    .badge-danger {
+        @apply bg-red-100 text-red-800;
+    }
+
+    html.dark .badge-danger {
+        @apply bg-red-900/40 text-red-300;
+    }
+
+    .badge-info {
+        @apply bg-blue-100 text-blue-800;
+    }
+
+    html.dark .badge-info {
+        @apply bg-blue-900/40 text-blue-300;
+    }
+
+    .badge-neutral {
+        @apply bg-slate-100 text-slate-700;
+    }
+
+    html.dark .badge-neutral {
+        @apply bg-slate-800 text-slate-300;
+    }
+
+    .sidebar-link {
+        @apply flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white;
+    }
+
+    .sidebar-link-active {
+        @apply bg-primary-600 text-white shadow-lg shadow-primary-600/25;
+    }
+
+    .page-title {
+        @apply text-2xl font-bold tracking-tight text-secondary-800;
+    }
+
+    html.dark .page-title {
+        @apply text-white;
+    }
+
+    .page-subtitle {
+        @apply mt-1 text-sm text-text-muted;
+    }
+
+    html.dark .page-subtitle {
+        @apply text-slate-400;
+    }
+}
+
+@layer utilities {
+    .animate-fade-in {
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    .animate-slide-up {
+        animation: slideUp 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .hotspot-body {
+        @apply min-h-screen overflow-x-hidden text-slate-800 antialiased;
+        font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+        background: #f1f5f9;
+    }
+
+    .hotspot-page {
+        @apply min-h-screen;
+        background:
+            radial-gradient(ellipse 80% 50% at 50% -10%, rgba(22, 163, 74, 0.08), transparent),
+            #f1f5f9;
+    }
+
+    .hotspot-main {
+        @apply relative;
+    }
+
+    .hotspot-container {
+        @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
+    }
+
+    /* ── Top bar ── */
+    .hotspot-topbar {
+        @apply border-b border-primary-700/30 bg-primary-600 shadow-lg shadow-primary-900/15;
+    }
+
+    .hotspot-brand-mark {
+        @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/20 text-white;
+    }
+
+    .hotspot-brand-name {
+        @apply text-sm font-bold leading-tight text-white sm:text-base;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .hotspot-brand-tag {
+        @apply text-[11px] text-green-100 sm:text-xs;
+    }
+
+    .hotspot-lang-switch {
+        @apply flex shrink-0 overflow-hidden rounded-lg border border-white/25 bg-white/15;
+    }
+
+    .hotspot-lang-btn {
+        @apply px-3.5 py-1.5 text-xs font-bold text-white/90 transition hover:bg-white/10;
+    }
+
+    .hotspot-lang-btn--active {
+        @apply bg-white text-primary-700 shadow-sm;
+    }
+
+    /* ── Banner ── */
+    .hotspot-banner {
+        @apply relative overflow-hidden;
+        background: linear-gradient(135deg, #14532d 0%, #16a34a 45%, #1e40af 100%);
+    }
+
+    .hotspot-banner__pattern {
+        position: absolute;
+        inset: 0;
+        opacity: 0.12;
+        background-image: radial-gradient(circle at 20% 50%, white 1px, transparent 1px),
+                          radial-gradient(circle at 80% 30%, white 1px, transparent 1px);
+        background-size: 32px 32px;
+    }
+
+    .hotspot-banner__eyebrow {
+        @apply mb-3 text-xs font-bold uppercase tracking-[0.2em] text-green-200;
+    }
+
+    .hotspot-banner__title {
+        @apply mx-auto max-w-2xl text-2xl font-extrabold leading-tight text-white sm:text-3xl lg:text-[2.25rem];
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .hotspot-banner__desc {
+        @apply mx-auto mt-4 max-w-xl text-sm leading-relaxed text-green-50/90 sm:text-base;
+    }
+
+    .hotspot-banner__pills {
+        @apply mt-6 flex flex-wrap items-center justify-center gap-2;
+    }
+
+    .hotspot-banner__pill {
+        @apply rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-xs font-semibold text-white backdrop-blur-sm;
+    }
+
+    /* ── Section headers ── */
+    .hotspot-section {
+        @apply text-center;
+    }
+
+    .hotspot-section-head {
+        @apply mb-6 flex items-center justify-center gap-3;
+    }
+
+    .hotspot-section-head--center {
+        @apply flex-col gap-4;
+    }
+
+    .hotspot-step-num {
+        @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-600 text-sm font-bold text-white shadow-md shadow-primary-600/30;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .hotspot-section-head--center .hotspot-step-num {
+        @apply h-11 w-11 text-base;
+    }
+
+    .hotspot-step-label {
+        @apply text-xs font-bold uppercase tracking-wider text-primary-600;
+    }
+
+    .hotspot-section-title {
+        @apply mt-1 text-2xl font-bold text-slate-800 sm:text-3xl;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .hotspot-section-desc {
+        @apply mx-auto mt-2 max-w-md text-sm text-slate-500;
+    }
+
+    /* ── Cards ── */
+    .hotspot-card {
+        @apply relative overflow-hidden rounded-2xl bg-white text-left;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.06), 0 10px 24px -4px rgba(0,0,0,0.08);
+    }
+
+    .hotspot-card--voucher {
+        @apply border border-slate-200/80;
+    }
+
+    .hotspot-card__strip {
+        @apply h-1.5 w-full bg-gradient-to-r from-primary-500 via-primary-600 to-blue-700;
+    }
+
+    .hotspot-card__inner {
+        @apply p-0;
+    }
+
+    .hotspot-card__header {
+        @apply flex items-start gap-4 border-b border-slate-100 px-6 py-5;
+    }
+
+    .hotspot-card__icon {
+        @apply flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-600;
+    }
+
+    .hotspot-card__title {
+        @apply text-lg font-bold text-slate-800;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .hotspot-card__subtitle {
+        @apply mt-1 text-sm leading-relaxed text-slate-500;
+    }
+
+    .hotspot-card__body {
+        @apply px-6 py-6;
+    }
+
+    /* ── Form ── */
+    .hotspot-field-label {
+        @apply mb-2 block text-sm font-semibold text-slate-700;
+    }
+
+    .hotspot-field {
+        @apply w-full rounded-xl border-2 border-slate-200 bg-slate-50 px-4 py-3.5 text-base text-slate-800 transition placeholder:text-slate-400 focus:border-primary-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary-500/10;
+    }
+
+    .hotspot-field--code {
+        @apply text-center text-lg font-bold tracking-[0.15em];
+    }
+
+    /* ── Buttons ── */
+    .hotspot-btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-xl bg-primary-600 px-5 py-3.5 text-sm font-bold text-white transition hover:bg-primary-700 active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-primary-500/25 disabled:cursor-not-allowed disabled:opacity-50;
+        font-family: 'Poppins', sans-serif;
+        box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35);
+    }
+
+    .hotspot-btn--block { @apply w-full; }
+    .hotspot-btn--lg { @apply py-4 text-base; }
+
+    .hotspot-btn--light {
+        @apply border-2 border-slate-200 bg-white text-slate-700 shadow-none hover:border-slate-300 hover:bg-slate-50;
+        box-shadow: none;
+    }
+
+    /* ── Plan cards ── */
+    .hotspot-plans-grid {
+        @apply grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6;
+    }
+
+    .hotspot-plan {
+        @apply relative flex flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white text-left transition duration-300;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 8px 20px -4px rgba(0,0,0,0.06);
+    }
+
+    .hotspot-plan:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px -6px rgba(0,0,0,0.12);
+    }
+
+    .hotspot-plan--featured {
+        @apply border-2 border-primary-500 lg:-mt-1 lg:mb-1;
+        box-shadow: 0 8px 30px -4px rgba(22, 163, 74, 0.25);
+    }
+
+    .hotspot-plan--featured:hover {
+        box-shadow: 0 16px 40px -6px rgba(22, 163, 74, 0.3);
+    }
+
+    .hotspot-plan__accent {
+        @apply h-1 w-full;
+    }
+
+    .hotspot-plan--emerald .hotspot-plan__accent { @apply bg-emerald-500; }
+    .hotspot-plan--amber .hotspot-plan__accent { @apply bg-amber-500; }
+    .hotspot-plan--blue .hotspot-plan__accent { @apply bg-blue-500; }
+    .hotspot-plan--teal .hotspot-plan__accent { @apply bg-teal-500; }
+    .hotspot-plan--violet .hotspot-plan__accent { @apply bg-violet-500; }
+    .hotspot-plan--green .hotspot-plan__accent { @apply bg-primary-500; }
+
+    .hotspot-plan--disabled {
+        @apply opacity-75 grayscale-[0.15];
+    }
+
+    .hotspot-plan__visual {
+        @apply relative overflow-hidden bg-slate-900;
+        height: 11rem;
+    }
+
+    .hotspot-plan--featured .hotspot-plan__visual {
+        height: 12rem;
+    }
+
+    .hotspot-plan__photo {
+        @apply h-full w-full object-cover transition duration-500;
+    }
+
+    .hotspot-plan:hover .hotspot-plan__photo {
+        transform: scale(1.05);
+    }
+
+    .hotspot-plan__photo-overlay {
+        @apply absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent;
+    }
+
+    .hotspot-plan__photo-tier {
+        @apply absolute bottom-3 left-3 rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-slate-800 shadow-lg backdrop-blur;
+    }
+
+    .hotspot-plan__tier {
+        @apply mb-1 inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-slate-600;
+    }
+
+    .hotspot-plan--featured .hotspot-plan__tier {
+        @apply bg-primary-100 text-primary-700;
+    }
+
+    .hotspot-plan__daily-rate {
+        @apply mt-2 inline-flex rounded-lg bg-emerald-50 px-2 py-1 text-[11px] font-semibold text-emerald-700;
+    }
+
+    .hotspot-plan__ribbon {
+        @apply absolute right-0 top-3 z-10 flex items-center gap-1 rounded-l-full bg-primary-600 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-white shadow-md;
+    }
+
+    .hotspot-plan__tag {
+        @apply absolute right-3 top-3 rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-600;
+    }
+
+    .hotspot-plan__body {
+        @apply flex flex-1 flex-col p-5 pt-6 sm:p-6;
+    }
+
+    .hotspot-plan__name {
+        @apply pr-16 text-lg font-bold text-slate-800;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .hotspot-plan__price-wrap {
+        @apply mt-4 border-b border-slate-100 pb-5;
+    }
+
+    .hotspot-plan__price {
+        @apply text-4xl font-extrabold leading-none text-slate-900;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .hotspot-plan--featured .hotspot-plan__price {
+        @apply text-primary-600;
+    }
+
+    .hotspot-plan__currency {
+        @apply mr-1 text-lg font-semibold text-slate-400;
+    }
+
+    .hotspot-plan__price-note {
+        @apply mt-1.5 text-xs text-slate-400;
+    }
+
+    .hotspot-plan__features {
+        @apply mt-5 flex-1 space-y-3 text-sm text-slate-600;
+    }
+
+    .hotspot-plan__features li {
+        @apply flex items-center gap-2.5;
+    }
+
+    .hotspot-plan__features svg {
+        @apply text-primary-500;
+    }
+
+    .hotspot-plan__features strong {
+        @apply font-bold text-slate-800;
+    }
+
+    .hotspot-plan__btn {
+        @apply mt-6;
+    }
+
+    .hotspot-plan--featured .hotspot-plan__btn {
+        box-shadow: 0 6px 20px rgba(22, 163, 74, 0.4);
+    }
+
+    /* ── Footer ── */
+    .hotspot-footer {
+        @apply mt-8 border-t border-slate-700/50 bg-slate-900 text-white;
+    }
+
+    .hotspot-footer__label {
+        @apply text-[11px] font-bold uppercase tracking-wider text-primary-400;
+    }
+
+    .hotspot-footer__value {
+        @apply mt-1 block text-sm text-slate-300 transition hover:text-white;
+    }
+
+    /* ── Modals ── */
+    .hotspot-overlay {
+        @apply fixed inset-0 z-50 flex items-end justify-center p-4 sm:items-center;
+    }
+
+    .hotspot-overlay__bg {
+        @apply absolute inset-0 bg-slate-900/60 backdrop-blur-sm;
+    }
+
+    .hotspot-dialog {
+        @apply relative w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl sm:p-8;
+        animation: modalSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .hotspot-dialog--success { @apply max-w-lg text-center; }
+
+    .hotspot-dialog__close {
+        @apply absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full text-2xl leading-none text-slate-400 hover:bg-slate-100 hover:text-slate-600;
+    }
+
+    .hotspot-dialog__title {
+        @apply mb-4 text-xl font-bold text-slate-800;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .hotspot-dialog__package {
+        @apply rounded-xl border-2 border-slate-100 bg-slate-50;
+    }
+
+    .hotspot-steps {
+        @apply flex items-stretch justify-between gap-1 rounded-xl bg-slate-100 p-1.5 text-[10px] font-semibold sm:text-xs;
+    }
+
+    .hotspot-steps__item {
+        @apply flex flex-1 flex-col items-center gap-1 rounded-lg px-1 py-2 text-center text-slate-500;
+    }
+
+    .hotspot-steps__item.is-active {
+        @apply bg-white text-primary-700 shadow-sm;
+    }
+
+    .hotspot-steps__item.is-done { @apply text-primary-600; }
+
+    .hotspot-steps__num {
+        @apply flex h-6 w-6 items-center justify-center rounded-full bg-slate-200 text-[11px] font-bold;
+    }
+
+    .hotspot-steps__item.is-active .hotspot-steps__num {
+        @apply bg-primary-600 text-white;
+    }
+
+    .hotspot-steps__item.is-done .hotspot-steps__num {
+        @apply bg-primary-100 text-primary-700;
+    }
+
+    @keyframes modalSlideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    [x-cloak] { display: none !important; }
+}

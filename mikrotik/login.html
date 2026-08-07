@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Abdul-Tech Wi-Fi</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: linear-gradient(160deg, #0f172a 0%, #14532d 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .card {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            padding: 28px 22px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 { font-size: 1.35rem; margin-bottom: 6px; }
+        p { color: #cbd5e1; font-size: 0.92rem; line-height: 1.5; }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #16a34a;
+            color: #fff;
+            border: 0;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-top: 16px;
+            cursor: pointer;
+        }
+        .btn--ghost { background: rgba(255,255,255,0.12); }
+        input {
+            width: 100%;
+            padding: 14px;
+            margin-top: 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.25);
+            background: rgba(0,0,0,0.25);
+            color: #fff;
+            font-size: 1rem;
+            text-align: center;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .divider { margin: 22px 0 4px; font-size: 0.75rem; color: #94a3b8; }
+        .status { margin-top: 14px; font-size: 0.85rem; color: #fbbf24; }
+        .hint { font-size: 0.78rem; color: #94a3b8; margin-top: 14px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Abdul-Tech Wi-Fi</h1>
+        <p>Karibu! Nunua kifurushi au weka voucha yako.</p>
+
+        <a class="btn" id="go" href="#">Nunua Kifurushi</a>
+        <p class="status" id="status">Inaangalia mfumo wa malipo...</p>
+
+        <p class="divider">AU WEKA VOUCHA HAPA</p>
+        <form name="login" action="$(link-login-only)" method="post">
+            <input type="hidden" name="dst" value="$(link-orig)">
+            <input type="text" name="username" id="voucher" placeholder="XXXXX-XXXXX" autocomplete="off" autocapitalize="characters">
+            <input type="hidden" name="password" id="password">
+            <button class="btn btn--ghost" type="submit" onclick="document.getElementById('password').value = document.getElementById('voucher').value.trim().toUpperCase();">Unganisha na Voucha</button>
+        </form>
+
+        <p class="hint">Hakuna data ya simu inahitajika.</p>
+    </div>
+
+    <script>
+        var params = 'view=packages&mac=$(mac)&ip=$(ip)&link-login=$(link-login)&link-orig=$(link-orig)';
+        var status = document.getElementById('status');
+
+        // The name is preferred, but some phones resolve DNS over HTTPS and
+        // never see the router's answer for it. The plain address always works,
+        // so it stays as a fallback rather than leaving such a phone stranded.
+        var hosts = [
+            'http://tech-spherewifi.xyz:8000',
+            'http://192.168.20.253:8000'
+        ];
+
+        document.getElementById('go').href = hosts[0] + '/?' + params;
+
+        var settled = false;
+
+        function reachable(host) {
+            if (settled) return;
+            settled = true;
+            status.textContent = 'Inaelekeza kwenye vifurushi...';
+            window.location.replace(host + '/?' + params);
+        }
+
+        function unreachable() {
+            if (settled) return;
+            settled = true;
+            status.textContent = 'Mfumo wa malipo haufikiki. Weka voucha yako hapa chini.';
+        }
+
+        setTimeout(unreachable, 8000);
+
+        // A no-cors request settles on network reachability alone, so it does
+        // not depend on any particular file existing on the server.
+        function probe(index) {
+            if (index >= hosts.length) {
+                unreachable();
+                return;
+            }
+
+            fetch(hosts[index] + '/?probe=' + Date.now(), {
+                mode: 'no-cors',
+                cache: 'no-store'
+            }).then(function () {
+                reachable(hosts[index]);
+            }).catch(function () {
+                probe(index + 1);
+            });
+        }
+
+        probe(0);
+    </script>
+</body>
+</html>

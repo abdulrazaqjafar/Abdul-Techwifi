@@ -1,0 +1,26 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('router_settings', function (Blueprint $table): void {
+            $table->string('router_ip')->nullable()->change();
+            $table->string('router_username')->nullable()->change();
+            $table->text('router_password')->nullable()->change();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('router_settings', function (Blueprint $table): void {
+            $table->string('router_ip')->nullable(false)->change();
+            $table->string('router_username')->nullable(false)->change();
+            $table->text('router_password')->nullable(false)->change();
+        });
+    }
+};
