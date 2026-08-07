@@ -24,9 +24,10 @@ fi
 
 step() { echo -e "\n\033[1;36m==> $1\033[0m"; }
 
+# phpoffice/phpspreadsheet 1.30.x haitaki PHP 8.5+, kwa hiyo 8.4/8.3 kwanza.
 detect_php_version() {
     local candidate
-    for candidate in 8.4 8.3 8.5 8.2 8.1; do
+    for candidate in 8.4 8.3 8.2; do
         if apt-cache show "php${candidate}-fpm" >/dev/null 2>&1; then
             echo "$candidate"
             return 0
@@ -35,22 +36,32 @@ detect_php_version() {
     return 1
 }
 
+ensure_compatible_php() {
+    if PHP_VERSION="$(detect_php_version)"; then
+        return 0
+    fi
+
+    step "PHP 8.4/8.3 haipatikani (8.5 haitoshi kwa Excel) — inaongezwa ondrej/php"
+    apt-get install -y software-properties-common
+    add-apt-repository -y ppa:ondrej/php
+    apt-get update -y
+
+    if PHP_VERSION="$(detect_php_version)"; then
+        return 0
+    fi
+
+    return 1
+}
+
 step "Kupakua orodha ya packages"
 apt-get update -y
 
 if [[ -z "$PHP_VERSION" ]]; then
-    if ! PHP_VERSION="$(detect_php_version)"; then
-        step "PHP haipatikani kwenye repo — inaongezwa ondrej/php"
-        apt-get install -y software-properties-common
-        add-apt-repository -y ppa:ondrej/php
-        apt-get update -y
-        PHP_VERSION="$(detect_php_version || true)"
+    if ! ensure_compatible_php; then
+        echo "Imeshindwa kupata PHP 8.4 au 8.3. Usitumie PHP 8.5 kwa sasa." >&2
+        echo "Angalia: apt-cache search php8.4-fpm" >&2
+        exit 1
     fi
-fi
-
-if [[ -z "${PHP_VERSION:-}" ]]; then
-    echo "Imeshindwa kupata package ya PHP-FPM. Angalia: apt-cache search php-fpm" >&2
-    exit 1
 fi
 
 echo "PHP itatumika: ${PHP_VERSION}"
